@@ -1,0 +1,203 @@
+# ==========================================================
+# 0. 核心系统长连接与消息推送（解决 wns / push.apple / mtalk 超时）
+# ==========================================================
+# 苹果 APNs 消息推送（域名 + 5223 专用长连接心跳端口）
+- DOMAIN-SUFFIX,push.apple.com,DIRECT
+- DST-PORT,5223,DIRECT
+
+# 微软 Windows 系统推送与通知长连接（解决 client.wns.windows.com 频繁重试）
+- DOMAIN-SUFFIX,wns.windows.com,⚡ 香港自动
+
+# 谷歌 FCM 安卓系统推送通道（全系列镜像与 5228 专用端口）
+#- DOMAIN-SUFFIX,mtalk.google.com,🇭🇰 香港节点
+#- DOMAIN-SUFFIX,alt1-mtalk.google.com,🇭🇰 香港节点
+#- DOMAIN-SUFFIX,alt2-mtalk.google.com,🇭🇰 香港节点
+#- DOMAIN-SUFFIX,alt3-mtalk.google.com,🇭🇰 香港节点
+#- DOMAIN-SUFFIX,alt4-mtalk.google.com,🇭🇰 香港节点
+#- DOMAIN-SUFFIX,alt5-mtalk.google.com,🇭🇰 香港节点
+#- DOMAIN-SUFFIX,alt6-mtalk.google.com,🇭🇰 香港节点
+#- DOMAIN-SUFFIX,alt7-mtalk.google.com,🇭🇰 香港节点
+#- DOMAIN-SUFFIX,alt8-mtalk.google.com,🇭🇰 香港节点
+#- DST-PORT,5228,🇭🇰 香港节点
+
+# ==========================================================
+# 1. GMAIL 专属规则 (低延迟稳定首选香港)
+# ==========================================================
+#- DOMAIN-SUFFIX,mail.google.com,🇭🇰 香港节点
+#- DOMAIN-SUFFIX,gmail.com,🇭🇰 香港节点
+#- DOMAIN-SUFFIX,inbox.google.com,🇭🇰 香港节点
+#- DOMAIN-KEYWORD,gmail,🇭🇰 香港节点
+
+# ==========================================================
+# 2. GOOGLE 全家桶与安卓生态核心连接
+# ==========================================================
+# Google Play 商店交互与 API（走亚洲大区自动优选，兼顾低延迟与高可用）
+#- DOMAIN-SUFFIX,googleapis.cn,🌏 亚洲地区
+#- DOMAIN-SUFFIX,gstatic.cn,🌏 亚洲地区
+#- DOMAIN-SUFFIX,google.cn,🌏 亚洲地区
+#- DOMAIN-SUFFIX,play.google.com,🌏 亚洲地区
+#- DOMAIN-SUFFIX,play.googleapis.com,🌏 亚洲地区
+#- DOMAIN-SUFFIX,play-fe.googleapis.com,🌏 亚洲地区
+#- DOMAIN-SUFFIX,android.clients.google.com,🌏 亚洲地区
+
+# Google APK / 资源核心下载 CDN (走亚洲自动测速，防应用下载卡进度排队)
+- DOMAIN-SUFFIX,gvt1.com,🌏 亚洲地区
+- DOMAIN-SUFFIX,gvt2.com,🌏 亚洲地区
+- DOMAIN-SUFFIX,gvt3.com,🌏 亚洲地区
+- DOMAIN-SUFFIX,gvt5.com,🌏 亚洲地区
+- DOMAIN-SUFFIX,gvt6.com,🌏 亚洲地区
+- DOMAIN-SUFFIX,xn--ngstr-lra8j.com,🌏 亚洲地区
+
+# 安装包分发与静态资源
+- DOMAIN-SUFFIX,1e100.net,🌏 亚洲地区
+- DOMAIN-SUFFIX,ggpht.com,🌏 亚洲地区
+
+# ==========================================================
+# 3. 电子钱包与境外金融（强行绑定本地节点，防风控冻结）
+# ==========================================================
+# 菲律宾 GCash 电子钱包
+- DOMAIN-SUFFIX,gcash.com,🇵🇭 菲律宾节点
+- DOMAIN-SUFFIX,mynt.xyz,🇵🇭 菲律宾节点
+- DOMAIN-SUFFIX,mynt.com.ph,🇵🇭 菲律宾节点
+- DOMAIN-KEYWORD,gcash,🇵🇭 菲律宾节点
+
+# 境外手机卡官网防风控
+- DOMAIN-SUFFIX,ultramobile.com,🇺🇸 美国节点
+- DOMAIN-SUFFIX,upwireless.com,🇺🇸 美国节点
+
+# ==========================================================
+# 4. 美国手机卡 Wi-Fi Calling 专属直连 (IPsec/IKEv2 隧道放行)
+# ==========================================================
+- DST-PORT,500,DIRECT
+- DST-PORT,4500,DIRECT
+- DOMAIN-SUFFIX,epdg.epc.mnc260.mcc310.pub.3gppnetwork.org,DIRECT
+- DOMAIN-SUFFIX,ss.epdg.epc.mnc260.mcc310.pub.3gppnetwork.org,DIRECT
+- DOMAIN-SUFFIX,msg.pc.t-mobile.com,DIRECT
+- DOMAIN-SUFFIX,epdg.epc.mnc410.mcc310.pub.3gppnetwork.org,DIRECT
+- DOMAIN-SUFFIX,wo.vzwwo.com,DIRECT
+- DOMAIN-SUFFIX,epdg.epc.mnc480.mcc311.pub.3gppnetwork.org,DIRECT
+
+# ==========================================================
+# 5. Google Voice 专属（强制锁死美区原生节点，防封号与降权）
+# ==========================================================
+- DOMAIN-SUFFIX,voice.google.com,🇺🇸 美国节点
+- DOMAIN-SUFFIX,telephony.goog,🇺🇸 美国节点
+- DOMAIN,voice-pa.clients6.google.com,🇺🇸 美国节点
+#- DOMAIN-KEYWORD,voice,🇺🇸 美国节点
+
+# ==========================================================
+# 6. 开发者、加速源与驱动分流
+# ==========================================================
+# GitHub 加速源（拉回代理，覆盖第三方规则误入直连撞墙的问题）
+- DOMAIN-SUFFIX,ghfast.top,♻️ 自动选择
+
+# Docker 镜像拉取与认证（走亚洲自动组，解决无法拉取与认证超时）
+- DOMAIN-SUFFIX,docker.com,🌏 亚洲地区
+- DOMAIN-SUFFIX,docker.io,🌏 亚洲地区
+- DOMAIN-SUFFIX,dockerhub.com,🌏 亚洲地区
+- DOMAIN-SUFFIX,registry-1.docker.io,🌏 亚洲地区
+- DOMAIN-SUFFIX,auth.docker.io,🌏 亚洲地区
+- DOMAIN-SUFFIX,mrs.1ms.run,🌏 亚洲地区
+
+# 驱动与网络基础服务（走亚洲自动组）
+- DOMAIN-SUFFIX,drivers.amd.com,🌏 亚洲地区
+- DOMAIN-SUFFIX,akamaihd.net,🌏 亚洲地区
+
+# ==========================================================
+# 7. 海外流媒体与特定站点（统一同区节点防盗链报错）
+# ==========================================================
+# 爱壹帆 (IYF) 全套流量归拢绑定（网页鉴权与切片同 IP，彻底根治播放错误）
+#- DOMAIN-SUFFIX,iyf.tv,🇸🇬 新加坡节点
+#- DOMAIN-KEYWORD,iyf,🇸🇬 新加坡节点
+
+# 其它海外视频与AI和多媒体服务
+- DOMAIN-SUFFIX,cableav.tv,🇸🇬 新加坡节点
+- DOMAIN-SUFFIX,muse.ai,🇺🇸 美国节点
+
+# ==========================================================
+# 8. 苹果生态综合分流体系
+# ==========================================================
+# Apple 智能与私密转送（香港受限，指向新加坡或 AI 服务组）
+- DOMAIN-SUFFIX,apple-relay.apple.com,🤖 AI服务
+- DOMAIN-SUFFIX,apple-relay.cloudflare.com,🤖 AI服务
+- DOMAIN-KEYWORD,apple-intelligence,🤖 AI服务
+
+# 苹果基础服务、定位、固件与云上贵州（强制直连，避免 i/o timeout）
+- DOMAIN-SUFFIX,ls.apple.com,DIRECT
+- DOMAIN,gsp64-ssl.ls.apple.com,DIRECT
+- DOMAIN,time.apple.com,DIRECT
+- DOMAIN,swcdn.apple.com,DIRECT
+- DOMAIN,appldnld.apple.com,DIRECT
+- DOMAIN-SUFFIX,icloud-content.com,DIRECT
+- DOMAIN-SUFFIX,me.com,DIRECT
+
+# 多区 App Store、商店页面、静态资源与日常 API（推荐走亚洲大区自动优选，容灾更强）
+- DOMAIN-SUFFIX,mzstatic.com,🌏 亚洲地区
+- DOMAIN-SUFFIX,aaplimg.com,🌏 亚洲地区
+- DOMAIN-SUFFIX,itunes.apple.com,🌏 亚洲地区
+- DOMAIN-SUFFIX,apps.apple.com,🌏 亚洲地区
+
+# 业务与商店服务（【选择组】交由 🍎 苹果服务 策略组统一管理，受控于 YACD）
+- DOMAIN-SUFFIX,icloud.com,🍎 苹果服务
+- DOMAIN-SUFFIX,apple.com,🍎 苹果服务
+
+# ==========================================================
+# 9. 微软 Bing、Copilot 与系统更新（精细规则置顶，避免大流量误入代理）
+# ==========================================================
+# 微软 OneDrive 大流量传输与系统更新（先匹配直连，跑满千兆且省节点流量）
+- DOMAIN-KEYWORD,blob.core.windows.net,DIRECT
+- DOMAIN-SUFFIX,onedrive.live.com,DIRECT
+- DOMAIN-SUFFIX,1drv.ms,DIRECT
+- DOMAIN-KEYWORD,1drv,DIRECT
+- DOMAIN-SUFFIX,sharepoint.com,DIRECT
+- DOMAIN-SUFFIX,download.windowsupdate.com,DIRECT
+- DOMAIN-SUFFIX,update.microsoft.com,DIRECT
+- DOMAIN-SUFFIX,windowsupdate.com,DIRECT
+- DOMAIN-SUFFIX,tlu.dl.delivery.mp.microsoft.com,DIRECT
+- DOMAIN-KEYWORD,xboxlive,DIRECT
+
+# Copilot 专属与认证接口（固定美区，避开地区许可证限制）
+- DOMAIN-SUFFIX,copilot.microsoft.com,🇺🇸 美国节点
+- DOMAIN-KEYWORD,copilot,🇺🇸 美国节点
+- DOMAIN-SUFFIX,copilot.com,🇺🇸 美国节点
+- DOMAIN-SUFFIX,copilot.cloud.microsoft,🇺🇸 美国节点
+- DOMAIN-SUFFIX,cloud.microsoft,🇺🇸 美国节点
+- DOMAIN-SUFFIX,live.com,🇺🇸 美国节点
+- DOMAIN-SUFFIX,msauth.net,🇺🇸 美国节点
+- DOMAIN-SUFFIX,msauthimages.net,🇺🇸 美国节点
+- DOMAIN-SUFFIX,msftauth.net,🇺🇸 美国节点
+
+# 发消息核心 API 与网关（解决一发消息就报地区/许可证限制的关键）
+- DOMAIN-SUFFIX,sydney.bing.com,🇺🇸 美国节点
+- DOMAIN-SUFFIX,syd.bing.com,🇺🇸 美国节点
+- DOMAIN-SUFFIX,edgeservices.bing.com,🇺🇸 美国节点
+- DOMAIN-SUFFIX,gateway.bingviz.microsoftapp.net,🇺🇸 美国节点
+
+# Bing 与 MSN 支撑体系
+- DOMAIN-SUFFIX,bing.com,🇺🇸 美国节点
+- DOMAIN-SUFFIX,api.msn.com,🇺🇸 美国节点
+- DOMAIN-SUFFIX,msn.com,🇺🇸 美国节点
+
+# 微软登录认证与办公组件（最后匹配兜底代理）
+- DOMAIN-SUFFIX,login.microsoftonline.com,🇺🇸 美国节点
+- DOMAIN-SUFFIX,login.live.com,🇺🇸 美国节点
+- DOMAIN-SUFFIX,account.live.com,🇺🇸 美国节点
+- DOMAIN-SUFFIX,office.com,🇺🇸 美国节点
+- DOMAIN-SUFFIX,office365.com,🇺🇸 美国节点
+- DOMAIN-SUFFIX,microsoft.com,🇺🇸 美国节点
+
+# ==========================================================
+# 10. Steam 游戏平台（下载直连加速，社区与商店走香港）
+# ==========================================================
+# Steam 下载 CDN（直连千兆拉满）
+- DOMAIN-SUFFIX,cm.steampowered.com,DIRECT
+- DOMAIN-SUFFIX,steamcontent.com,DIRECT
+- DOMAIN-SUFFIX,steamserver.net,DIRECT
+- DOMAIN-KEYWORD,steamcontent,DIRECT
+
+# Steam 商店、社区与好友网络（走香港节点，解决 101/105/118 报错）
+- DOMAIN-SUFFIX,steampowered.com,⚡ 香港自动
+- DOMAIN-SUFFIX,steamcommunity.com,⚡ 香港自动
+- DOMAIN-SUFFIX,steamgames.com,⚡ 香港自动
+- DOMAIN-SUFFIX,steamstatic.com,⚡ 香港自动
+- DOMAIN-SUFFIX,steam-chat.com,⚡ 香港自动
